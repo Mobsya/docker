@@ -9,6 +9,9 @@ trigger:
 pool:
   vmImage: 'Ubuntu-16.04'
 
+variables:
+- group: passwords
+
 steps:
 - script: |
     docker build -t mobsya/flatpak-builders .
