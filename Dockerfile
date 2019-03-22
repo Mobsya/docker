@@ -1,4 +1,4 @@
-FROM alpine:latest
+FROM cosmic:latest
 MAINTAINER Corentin Jabot <corentinjabot@mobsya.org>
 
 VOLUME /build
