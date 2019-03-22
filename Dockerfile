@@ -1,4 +1,4 @@
-FROM cosmic:latest
+FROM ubuntu:cosmic
 MAINTAINER Corentin Jabot <corentinjabot@mobsya.org>
 
 VOLUME /build
