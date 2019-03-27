@@ -9,6 +9,7 @@ trigger:
 
 jobs:
 - job:
+  displayName: "Build Flatpak Docker Image"
   pool:
     vmImage: 'Ubuntu-16.04'
   variables:
@@ -22,6 +23,7 @@ jobs:
       displayName: "Build Flatpak image"
 
 - job:
+  displayName: "Build Linux Dev Environment Docker Image"
   pool:
     vmImage: 'Ubuntu-16.04'
   variables:
