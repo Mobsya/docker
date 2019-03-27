@@ -18,4 +18,4 @@ steps:
     docker login -u cor3ntinmobsya -p $(corentin-docker)
     docker push mobsya/flatpak-builders
   workingDirectory: flatpak
-  displayname: "Build Flatpak image"
+  displayName: "Build Flatpak image"
