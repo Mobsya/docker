@@ -17,3 +17,5 @@ steps:
     docker build -t mobsya/flatpak-builders:kde-latest .
     docker login -u cor3ntinmobsya -p $(corentin-docker)
     docker push mobsya/flatpak-builders
+  workingDirectory: flatpak
+  displayname: "Build Flatpak image"
