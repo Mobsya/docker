@@ -12,10 +12,21 @@ pool:
 variables:
 - group: passwords
 
-steps:
-- script: |
-    docker build -t mobsya/flatpak-builders:kde-latest .
-    docker login -u cor3ntinmobsya -p $(corentin-docker)
-    docker push mobsya/flatpak-builders
-  workingDirectory: flatpak
-  displayName: "Build Flatpak image"
+jobs:
+- job:
+    steps:
+    - script: |
+        docker build -t mobsya/flatpak-builders:kde-latest .
+        docker login -u cor3ntinmobsya -p $(corentin-docker)
+        docker push mobsya/flatpak-builders
+    workingDirectory: flatpak
+    displayName: "Build Flatpak image"
+
+- job:
+    steps:
+    - script: |
+        docker build -t mobsya/linux-dev-env:latest .
+        docker login -u cor3ntinmobsya -p $(corentin-docker)
+        docker push mobsya/linux-dev-env
+    workingDirectory: linux_dev_env
+    displayName: "Build Linux Dev Env image"
