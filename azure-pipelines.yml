@@ -46,7 +46,7 @@ jobs:
   steps:
     - script: |
         docker build -t mobsya/windows-dev-env:latest .
-        docker login -u cor3ntinmobsya -p $(corentin-docker)
+        echo | set /p="$(corentin-docker)" | docker login --username cor3ntinmobsya --password-stdin
         docker push mobsya/windows-dev-env
       workingDirectory: windows_dev_env
       displayName: "Build Windows Dev Env image"
