@@ -35,3 +35,22 @@ jobs:
         docker push mobsya/linux-dev-env
       workingDirectory: linux_dev_env
       displayName: "Build Linux Dev Env image"
+
+
+- job:
+  timeoutInMinutes: 360
+  displayName: "Build Windows Dev Environment Docker Image"
+  pool:
+    vmImage: 'win1803'
+  variables:
+  - group: passwords
+  steps:
+    - script: |
+        echo | set /p="%DOCKER_PASSWORD%" | docker login --username cor3ntinmobsya --password-stdin
+        docker build -t mobsya/windows-dev-env:latest .
+        echo | set /p="%DOCKER_PASSWORD%" | docker login --username cor3ntinmobsya --password-stdin
+        docker push mobsya/windows-dev-env
+      workingDirectory: windows_dev_env
+      displayName: "Build Windows Dev Env image"
+      env:
+        DOCKER_PASSWORD: $(corentin-docker)
