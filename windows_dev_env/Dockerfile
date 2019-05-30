@@ -12,13 +12,9 @@ SHELL ["cmd", "/S", "/C"]
 ARG CHANNEL_URL=https://aka.ms/vs/16/release/channel
 ADD ${CHANNEL_URL} C:\TEMP\VisualStudio.chman
 
-# Set up environment to collect install errors.
-COPY install.cmd C:\TEMP\
-ADD https://aka.ms/vscollect.exe C:\TEMP\collect.exe
-
 # Download and install Build Tools for Visual Studio 2017 for native desktop workload.
 ADD https://aka.ms/vs/16/release/vs_buildtools.exe C:\TEMP\vs_buildtools.exe
-RUN C:\TEMP\install.cmd C:\TEMP\vs_buildtools.exe --quiet --wait --norestart --nocache `
+RUN C:\TEMP\vs_buildtools.exe --quiet --wait --norestart --nocache `
     --channelUri C:\TEMP\VisualStudio.chman `
     --installChannelUri C:\TEMP\VisualStudio.chman `
     --add Microsoft.VisualStudio.Workload.VCTools `
@@ -29,7 +25,7 @@ RUN C:\TEMP\install.cmd C:\TEMP\vs_buildtools.exe --quiet --wait --norestart --n
     --add Microsoft.Component.VC.Runtime.UCRTSDK `
     --add Microsoft.Component.MSBuild `
     --installPath C:\BuildTools `
-    && RD /S /Q "C:\\Program Files (x86)\\Microsoft Visual Studio\\Installer" " C:\\ProgramData\\Package Cache" "C:\\TEMP"
+    && RD /S /Q "C:\Program Files (x86)\Microsoft Visual Studio\Installer" " C:\ProgramData\Package Cache" "C:\TEMP"
 
 
 # Tools
