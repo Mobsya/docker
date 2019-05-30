@@ -1,16 +1,12 @@
 # escape=`
 
-FROM mcr.microsoft.com/windows/servercore:sac2016-amd64
+FROM mcr.microsoft.com/windows/servercore:ltsc2016-amd64
 
 
 SHELL ["powershell", "-Command", "$ErrorActionPreference = 'Stop'; $ProgressPreference = 'SilentlyContinue';"]
 
 # Reset the shell.
 SHELL ["cmd", "/S", "/C"]
-
-# Install Node.js LTS
-ADD https://nodejs.org/dist/v8.11.3/node-v8.11.3-x64.msi C:\TEMP\node-install.msi
-RUN start /wait msiexec.exe /i C:\TEMP\node-install.msi /l*vx "%TEMP%\MSI-node-install.log" /qn ADDLOCAL=ALL
 
 # Download channel for fixed install.
 ARG CHANNEL_URL=https://aka.ms/vs/16/release/channel
@@ -32,38 +28,41 @@ RUN C:\TEMP\install.cmd C:\TEMP\vs_buildtools.exe --quiet --wait --norestart --n
     --add Microsoft.VisualStudio.Component.VC.Tools.x86.x64 `
     --add Microsoft.Component.VC.Runtime.UCRTSDK `
     --add Microsoft.Component.MSBuild `
-    --installPath C:\BuildTools
+    --installPath C:\BuildTools `
+    && RD /S /Q "%ProgramFiles(x86)%\\Microsoft Visual Studio\\Installer\\" "%ProgramData%\\Package Cache"
 
 
 # Tools
 RUN @powershell -NoProfile -ExecutionPolicy unrestricted -Command "iex ((new-object net.webclient).DownloadString('https://chocolatey.org/install.ps1'))" && SET PATH=%PATH%;%ALLUSERSPROFILE%\chocolatey\bin
 RUN powershell choco feature disable --name showDownloadProgress
-RUN powershell choco install ninja 7zip nsis git cmake -y --ignoredetectedreboot
+RUN choco install git.install -y --params "'/GitAndUnixToolsOnPath /NoAutoCrlf /NoCredentialManager'"
+RUN powershell choco install nodejs ninja 7zip nsis cmake -y --ignoredetectedreboot
 
 # VCPKG
 RUN git clone https://github.com/Microsoft/vcpkg.git C:\vcpkg
 RUN C:\BuildTools\Common7\Tools\VsDevCmd.bat && C:\vcpkg\bootstrap-vcpkg.bat -Verbose
-RUN C:\BuildTools\Common7\Tools\VsDevCmd.bat && C:\vcpkg\vcpkg.exe install boost-beast:x64-windows-static boost-beast:x86-windows-static `
-                                                                           boost-filesystem:x64-windows-static boost-filesystem:x86-windows-static `
-                                                                           boost-endian:x64-windows-static boost-endian:x86-windows-static `
-                                                                           boost-container-hash:x64-windows-static boost-container-hash:x86-windows-static `
-                                                                           boost-endian:x64-windows-static boost-endian:x86-windows-static `
-                                                                           boost-lexical-cast:x64-windows-static boost-lexical-cast:x86-windows-static `
-                                                                           boost-program-options:x64-windows-static boost-program-options:x86-windows-static `
-                                                                           boost-scope-exit:x64-windows-static boost-scope-exit:x86-windows-static `
-                                                                           boost-signals2:x64-windows-static boost-signals2:x86-windows-static `
-                                                                           boost-utility:x64-windows-static boost-utility:x86-windows-static `
-                                                                           boost-uuid:x64-windows-static boost-uuid:x86-windows-static `
-                                                                           boost-bind:x64-windows-static boost-bind:x86-windows-static `
-                                                                           boost-chrono:x64-windows-static boost-chrono:x86-windows-static `
-                                                                           boost-date-time:x64-windows-static boost-date-time:x86-windows-static `
-                                                                           boost-type-traits:x64-windows-static boost-type-traits:x86-windows-static `
-                                                                           boost-static-assert:x64-windows-static boost-static-assert:x86-windows-static `
-                                                                           boost-function:x64-windows-static boost-function:x86-windows-static `
-                                                                           boost-smart-ptr:x64-windows-static boost-smart-ptr:x86-windows-static `
-                                                                           boost-optional:x64-windows-static boost-optional:x86-windows-static
-
-RUN C:\BuildTools\Common7\Tools\VsDevCmd.bat && C:\vcpkg\vcpkg.exe install openssl:x64-windows openssl:x86-windows
+RUN C:\BuildTools\Common7\Tools\VsDevCmd.bat && C:\vcpkg\vcpkg.exe install `
+    boost-beast:x64-windows-static boost-beast:x86-windows-static `
+    boost-filesystem:x64-windows-static boost-filesystem:x86-windows-static `
+    boost-endian:x64-windows-static boost-endian:x86-windows-static `
+    boost-container-hash:x64-windows-static boost-container-hash:x86-windows-static `
+    boost-endian:x64-windows-static boost-endian:x86-windows-static `
+    boost-lexical-cast:x64-windows-static boost-lexical-cast:x86-windows-static `
+    boost-program-options:x64-windows-static boost-program-options:x86-windows-static `
+    boost-scope-exit:x64-windows-static boost-scope-exit:x86-windows-static `
+    boost-signals2:x64-windows-static boost-signals2:x86-windows-static `
+    boost-utility:x64-windows-static boost-utility:x86-windows-static `
+    boost-uuid:x64-windows-static boost-uuid:x86-windows-static `
+    boost-bind:x64-windows-static boost-bind:x86-windows-static `
+    boost-chrono:x64-windows-static boost-chrono:x86-windows-static `
+    boost-date-time:x64-windows-static boost-date-time:x86-windows-static `
+    boost-type-traits:x64-windows-static boost-type-traits:x86-windows-static `
+    boost-static-assert:x64-windows-static boost-static-assert:x86-windows-static `
+    boost-function:x64-windows-static boost-function:x86-windows-static `
+    boost-smart-ptr:x64-windows-static boost-smart-ptr:x86-windows-static `
+    boost-optional:x64-windows-static boost-optional:x86-windows-static `
+    openssl:x64-windows openssl:x86-windows `
+    && RD /S /Q C:\vcpkg\downloads C:\vcpkg\buildtrees
 
 # LLVM
 ADD http://releases.llvm.org/8.0.0/LLVM-8.0.0-win64.exe C:\Temp\llvm.exe
