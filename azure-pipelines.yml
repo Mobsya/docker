@@ -40,7 +40,7 @@ jobs:
 - job:
   displayName: "Build Windows Dev Environment Docker Image"
   pool:
-    vmImage: 'vs2019'
+    vmImage: 'windows-2019'
   variables:
   - group: passwords
   steps:
