@@ -38,6 +38,7 @@ jobs:
 
 
 - job:
+  timeoutInMinutes: 360
   displayName: "Build Windows Dev Environment Docker Image"
   pool:
     vmImage: 'win1803'
