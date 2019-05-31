@@ -46,6 +46,7 @@ jobs:
   - group: passwords
   steps:
     - script: |
+        $(corentin-docker) | & docker login --username cor3ntinmobsya --password-stdin
         docker build -t mobsya/windows-dev-env:latest .
         $(corentin-docker) | & docker login --username cor3ntinmobsya --password-stdin
         docker push mobsya/windows-dev-env
