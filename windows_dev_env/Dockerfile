@@ -25,7 +25,7 @@ RUN C:\TEMP\vs_buildtools.exe --quiet --wait --norestart --nocache `
     --add Microsoft.Component.VC.Runtime.UCRTSDK `
     --add Microsoft.Component.MSBuild `
     --installPath C:\BuildTools `
-    && RD /S /Q "C:\Program Files (x86)\Microsoft Visual Studio\Installer" " C:\ProgramData\Package Cache" "C:\TEMP"
+    && RD /S /Q "C:\Program Files (x86)\Microsoft Visual Studio\Installer" "C:\ProgramData\Package Cache" "C:\TEMP"
 
 
 # Tools
