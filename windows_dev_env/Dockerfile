@@ -69,7 +69,7 @@ RUN setx LLD_LINK "C:\\llvm\\bin\\lld-link.exe"
 # QT
 COPY qt-installer-noninteractive.qs C:\TEMP\
 ADD https://download.qt.io/official_releases/online_installers/qt-unified-windows-x86-online.exe C:\Temp\qt.exe
-RUN C:\Temp\qt.exe --script C:\Temp\qt-installer-noninteractive.qs --logging-rules "ifw.*=true" --verbose && RD /S /Q C:\Users\%USERNAME%\AppData\Temp
+RUN C:\Temp\qt.exe --script C:\Temp\qt-installer-noninteractive.qs --logging-rules "ifw.*=true" --verbose
 
 
 COPY bonjoursdksetup.exe C:\TEMP\
