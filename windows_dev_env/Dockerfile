@@ -1,6 +1,6 @@
 # escape=`
 
-FROM mcr.microsoft.com/windows/servercore:ltsc2016-amd64
+FROM mcr.microsoft.com/windows/servercore:1803-amd64
 
 
 SHELL ["powershell", "-Command", "$ErrorActionPreference = 'Stop'; $ProgressPreference = 'SilentlyContinue';"]
@@ -24,8 +24,9 @@ RUN C:\TEMP\vs_buildtools.exe --quiet --wait --norestart --nocache `
     --add Microsoft.VisualStudio.Component.VC.Tools.x86.x64 `
     --add Microsoft.Component.VC.Runtime.UCRTSDK `
     --add Microsoft.Component.MSBuild `
-    --installPath C:\BuildTools `
-    && RD /S /Q "C:\Program Files (x86)\Microsoft Visual Studio\Installer" "C:\ProgramData\Package Cache" "C:\TEMP"
+    --installPath C:\BuildTools 
+
+#&& RD /S /Q "C:\Program Files (x86)\Microsoft Visual Studio\Installer" "C:\ProgramData\Package Cache" "C:\TEMP"
 
 
 # Tools
