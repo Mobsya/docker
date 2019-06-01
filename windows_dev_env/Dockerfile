@@ -31,7 +31,7 @@ RUN C:\TEMP\vs_buildtools.exe --quiet --wait --norestart --nocache `
 # Tools
 RUN @powershell -NoProfile -ExecutionPolicy unrestricted -Command "iex ((new-object net.webclient).DownloadString('https://chocolatey.org/install.ps1'))" && SET PATH=%PATH%;%ALLUSERSPROFILE%\chocolatey\bin
 RUN powershell choco feature disable --name showDownloadProgress
-RUN choco install git.install -y --params "'/GitAndUnixToolsOnPath /NoAutoCrlf /NoCredentialManager'"
+RUN choco install git.install -y --params "'/GitAndUnixToolsOnPath /NoAutoCrlf'"
 RUN powershell choco install nodejs ninja 7zip nsis cmake -y --ignoredetectedreboot -ignore-package-exit-codes
 
 # VCPKG
