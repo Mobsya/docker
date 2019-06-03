@@ -14,7 +14,8 @@ ADD ${CHANNEL_URL} C:\TEMP\VisualStudio.chman
 
 # Download and install Build Tools for Visual Studio 2017 for native desktop workload.
 ADD https://aka.ms/vs/16/release/vs_buildtools.exe C:\TEMP\vs_buildtools.exe
-RUN C:\TEMP\vs_buildtools.exe --quiet --wait --norestart --nocache `
+RUN powershell -Command "Invoke-WebRequest https://aka.ms/vs/16/release/vs_buildtools.exe -OutFile C:\TEMP\vs_buildtools.exe" `
+    && C:\TEMP\vs_buildtools.exe --quiet --wait --norestart --nocache `
     --channelUri C:\TEMP\VisualStudio.chman `
     --installChannelUri C:\TEMP\VisualStudio.chman `
     --add Microsoft.VisualStudio.Workload.VCTools `
@@ -25,16 +26,16 @@ RUN C:\TEMP\vs_buildtools.exe --quiet --wait --norestart --nocache `
     --add Microsoft.Component.VC.Runtime.UCRTSDK `
     --add Microsoft.Component.MSBuild `
     --installPath C:\BuildTools `
-    && RD /S /Q "C:\ProgramData\Package Cache" "C:\TEMP"
+    && RD /S /Q "C:\ProgramData\Package Cache" "C:\TEMP" `
+    && RM C:\TEMP\vs_buildtools.exe
 
 
 # Tools
 RUN @powershell -NoProfile -ExecutionPolicy unrestricted -Command "iex ((new-object net.webclient).DownloadString('https://chocolatey.org/install.ps1'))" && SET PATH=%PATH%;%ALLUSERSPROFILE%\chocolatey\bin
-RUN powershell choco feature disable --name showDownloadProgress
-RUN choco install git.install -y --params "'/GitAndUnixToolsOnPath /NoAutoCrlf'"
-RUN powershell choco install nodejs ninja 7zip nsis -y --ignoredetectedreboot -ignore-package-exit-codes
-RUN powershell choco install cmake -y --ignoredetectedreboot -ignore-package-exit-codes --installargs 'ADD_CMAKE_TO_PATH=System'
-RUN setx PATH "%path%;C:\\Program Files (x86)\\NSIS"
+RUN powershell choco feature disable --name showDownloadProgress && choco install git.install -y --params "'/GitAndUnixToolsOnPath /NoAutoCrlf'" `
+  && choco install nodejs ninja 7zip nsis -y --ignoredetectedreboot -ignore-package-exit-codes `
+  && powershell choco install cmake -y --ignoredetectedreboot -ignore-package-exit-codes --installargs 'ADD_CMAKE_TO_PATH=System'
+  && setx PATH "%path%;C:\\Program Files (x86)\\NSIS"
 
 # VCPKG
 RUN git clone https://github.com/Microsoft/vcpkg.git C:\vcpkg
@@ -61,19 +62,20 @@ RUN C:\BuildTools\Common7\Tools\VsDevCmd.bat && C:\vcpkg\vcpkg.exe install `
     boost-smart-ptr:x64-windows-static boost-smart-ptr:x86-windows-static `
     boost-optional:x64-windows-static boost-optional:x86-windows-static `
     openssl:x64-windows openssl:x86-windows `
-    && RD /S /Q C:\vcpkg\downloads C:\vcpkg\buildtrees
+    && RD /S /Q C:\vcpkg\downloads C:\vcpkg\buildtrees C:\vcpkg\packages
 
 # LLVM
-ADD http://releases.llvm.org/8.0.0/LLVM-8.0.0-win64.exe C:\Temp\llvm.exe
-RUN 7z x C:\Temp\llvm.exe -oC:\LLVM
-RUN setx PATH "%path%;C:\\llvm\\bin"
-RUN setx LLD_LINK "C:\\llvm\\bin\\lld-link.exe"
+ADD
+RUN powershell -Command "Invoke-WebRequest http://releases.llvm.org/8.0.0/LLVM-8.0.0-win64.exe  -OutFile C:\Temp\llvm.exe" `
+  && 7z x C:\Temp\llvm.exe -oC:\LLVM && setx PATH "%path%;C:\\llvm\\bin" && setx LLD_LINK "C:\\llvm\\bin\\lld-link.exe" && RM C:\Temp\llvm.exe
 
 # QT
 COPY qt-installer-noninteractive.qs C:\TEMP\
-ADD https://download.qt.io/official_releases/online_installers/qt-unified-windows-x86-online.exe C:\Temp\qt.exe
-RUN C:\Temp\qt.exe --script C:\Temp\qt-installer-noninteractive.qs --platform=minimal --logging-rules "ifw.*=true" --verbose && RD /S /Q C:\Users\%USERNAME%\AppData\Local\Temp
+RUN powershell -Command "Invoke-WebRequest https://download.qt.io/official_releases/online_installers/qt-unified-windows-x86-online.exe -OutFile C:\Temp\qt.exe" `
+ && C:\Temp\qt.exe --script C:\Temp\qt-installer-noninteractive.qs --platform=minimal --logging-rules "ifw.*=true" --verbose `
+    && RD /S /Q C:\Users\%USERNAME%\AppData\Local\Temp C:\Qt\Docs C:\Qt\Examples C:\Qt\Tools
+    && RM C:\Temp\qt.exe
 
 # Use developer command prompt and start PowerShell if no other command specified.
-ENTRYPOINT C:\BuildTools\Common7\Tools\VsDevCmd.bat &&
-CMD ["powershell.exe", "-NoLogo", "-ExecutionPolicy", "Bypass"]
+#ENTRYPOINT C:\BuildTools\Common7\Tools\VsDevCmd.bat &&
+#CMD ["powershell.exe", "-NoLogo", "-ExecutionPolicy", "Bypass"]
