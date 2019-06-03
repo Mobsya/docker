@@ -26,7 +26,7 @@ RUN powershell -Command "Invoke-WebRequest https://aka.ms/vs/16/release/vs_build
     --add Microsoft.Component.MSBuild `
     --installPath C:\BuildTools `
     && RD /S /Q "C:\ProgramData\Package Cache" "C:\TEMP" `
-    && RM C:\TEMP\vs_buildtools.exe
+    && powershell rm C:\TEMP\vs_buildtools.exe
 
 
 # Tools
@@ -66,14 +66,14 @@ RUN git clone https://github.com/Microsoft/vcpkg.git C:\vcpkg `
 
 # LLVM
 RUN powershell -Command "Invoke-WebRequest http://releases.llvm.org/8.0.0/LLVM-8.0.0-win64.exe  -OutFile C:\Temp\llvm.exe" `
-  && 7z x C:\Temp\llvm.exe -oC:\LLVM && setx PATH "%path%;C:\\llvm\\bin" && setx LLD_LINK "C:\\llvm\\bin\\lld-link.exe" && RM C:\Temp\llvm.exe
+  && 7z x C:\Temp\llvm.exe -oC:\LLVM && setx PATH "%path%;C:\\llvm\\bin" && setx LLD_LINK "C:\\llvm\\bin\\lld-link.exe" && powershell rm C:\Temp\llvm.exe
 
 # QT
 COPY qt-installer-noninteractive.qs C:\TEMP\
 RUN powershell -Command "Invoke-WebRequest https://download.qt.io/official_releases/online_installers/qt-unified-windows-x86-online.exe -OutFile C:\Temp\qt.exe" `
  && C:\Temp\qt.exe --script C:\Temp\qt-installer-noninteractive.qs --platform=minimal --logging-rules "ifw.*=true" --verbose `
     && RD /S /Q C:\Users\%USERNAME%\AppData\Local\Temp C:\Qt\Docs C:\Qt\Examples C:\Qt\Tools `
-    && RM C:\Temp\qt.exe
+    && powershell rm C:\Temp\qt.exe
 
 # Use developer command prompt and start PowerShell if no other command specified.
 #ENTRYPOINT C:\BuildTools\Common7\Tools\VsDevCmd.bat &&
