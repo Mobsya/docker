@@ -14,7 +14,7 @@ ADD ${CHANNEL_URL} C:\TEMP\VisualStudio.chman
 COPY qt-installer-noninteractive.qs C:\TEMP\
 
 # Download and install Build Tools for Visual Studio 2017 for native desktop workload.
-RUN powershell -Command "Invoke-WebRequest 'https://aka.ms/vs/16/release/vs_buildtools.exe'' -OutFile 'C:\TEMP\vs_buildtools.exe''" `
+RUN powershell -Command "Invoke-WebRequest 'https://aka.ms/vs/16/release/vs_buildtools.exe' -OutFile 'C:\TEMP\vs_buildtools.exe'" `
   && C:\TEMP\vs_buildtools.exe --quiet --wait --norestart --nocache `
     --channelUri C:\TEMP\VisualStudio.chman `
     --installChannelUri C:\TEMP\VisualStudio.chman `
