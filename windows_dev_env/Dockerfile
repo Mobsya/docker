@@ -31,8 +31,10 @@ RUN C:\TEMP\vs_buildtools.exe --quiet --wait --norestart --nocache `
 # Tools
 RUN @powershell -NoProfile -ExecutionPolicy unrestricted -Command "iex ((new-object net.webclient).DownloadString('https://chocolatey.org/install.ps1'))" && SET PATH=%PATH%;%ALLUSERSPROFILE%\chocolatey\bin
 RUN powershell choco feature disable --name showDownloadProgress
-RUN choco install git.install -y --params "'/GitAndUnixToolsOnPath /NoAutoCrlf /NoCredentialManager'"
-RUN powershell choco install nodejs ninja 7zip nsis cmake -y --ignoredetectedreboot -ignore-package-exit-codes
+RUN choco install git.install -y --params "'/GitAndUnixToolsOnPath /NoAutoCrlf'"
+RUN powershell choco install nodejs ninja 7zip nsis -y --ignoredetectedreboot -ignore-package-exit-codes
+RUN powershell choco install cmake -y --ignoredetectedreboot -ignore-package-exit-codes --installargs 'ADD_CMAKE_TO_PATH=System'
+RUN setx PATH "%path%;C:\\Program Files (x86)\\NSIS"
 
 # VCPKG
 RUN git clone https://github.com/Microsoft/vcpkg.git C:\vcpkg
@@ -69,6 +71,7 @@ RUN setx LLD_LINK "C:\\llvm\\bin\\lld-link.exe"
 # QT
 COPY qt-installer-noninteractive.qs C:\TEMP\
 ADD https://download.qt.io/official_releases/online_installers/qt-unified-windows-x86-online.exe C:\Temp\qt.exe
+<<<<<<< HEAD
 RUN C:\Temp\qt.exe --script C:\Temp\qt-installer-noninteractive.qs --logging-rules "ifw.*=true" --verbose && RD /S /Q C:\Users\%USERNAME%\AppData\Local\Temp
 
 
@@ -77,6 +80,11 @@ RUN 7z x "C:\TEMP\\bonjoursdksetup.exe"  -oC:\TEMP
 RUN msiexec /i C:\TEMP\Bonjour64.msi /qb /quiet
 RUN msiexec /i C:\TEMP\BonjourSDK64.msi /qb /quiet
 
+=======
+RUN C:\Temp\qt.exe --script C:\Temp\qt-installer-noninteractive.qs --platform=minimal --logging-rules "ifw.*=true" --verbose && RD /S /Q C:\Users\%USERNAME%\AppData\Local\Temp
+
+
+>>>>>>> d34cca48ac1c2c97dcd645d02eb8bb9fc8f30dba
 # Use developer command prompt and start PowerShell if no other command specified.
 ENTRYPOINT C:\BuildTools\Common7\Tools\VsDevCmd.bat &&
 CMD ["powershell.exe", "-NoLogo", "-ExecutionPolicy", "Bypass"]

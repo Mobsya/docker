@@ -46,10 +46,11 @@ jobs:
   - group: passwords
   steps:
     - script: |
-        $secret = "$(corentin-docker)"
-        echo $secret | docker login --username cor3ntinmobsya --password-stdin
+        echo | set /p="%DOCKER_PASSWORD%" | docker login --username cor3ntinmobsya --password-stdin
         docker build -t mobsya/windows-dev-env:latest .
-        echo $secret | docker login --username cor3ntinmobsya --password-stdin
+        echo | set /p="%DOCKER_PASSWORD%" | docker login --username cor3ntinmobsya --password-stdin
         docker push mobsya/windows-dev-env
       workingDirectory: windows_dev_env
       displayName: "Build Windows Dev Env image"
+      env:
+        DOCKER_PASSWORD: $(corentin-docker)
