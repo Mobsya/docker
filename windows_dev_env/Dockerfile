@@ -42,6 +42,7 @@ RUN C:\BuildTools\Common7\Tools\VsDevCmd.bat && C:\vcpkg\bootstrap-vcpkg.bat -Ve
 RUN C:\BuildTools\Common7\Tools\VsDevCmd.bat && C:\vcpkg\vcpkg.exe install `
     boost-beast:x64-windows-static boost-beast:x86-windows-static `
     boost-filesystem:x64-windows-static boost-filesystem:x86-windows-static `
+    boost-interprocess:x64-windows-static boost-interprocess:x86-windows-static `
     boost-endian:x64-windows-static boost-endian:x86-windows-static `
     boost-container-hash:x64-windows-static boost-container-hash:x86-windows-static `
     boost-endian:x64-windows-static boost-endian:x86-windows-static `
@@ -71,20 +72,8 @@ RUN setx LLD_LINK "C:\\llvm\\bin\\lld-link.exe"
 # QT
 COPY qt-installer-noninteractive.qs C:\TEMP\
 ADD https://download.qt.io/official_releases/online_installers/qt-unified-windows-x86-online.exe C:\Temp\qt.exe
-<<<<<<< HEAD
-RUN C:\Temp\qt.exe --script C:\Temp\qt-installer-noninteractive.qs --logging-rules "ifw.*=true" --verbose && RD /S /Q C:\Users\%USERNAME%\AppData\Local\Temp
-
-
-COPY bonjoursdksetup.exe C:\TEMP\
-RUN 7z x "C:\TEMP\\bonjoursdksetup.exe"  -oC:\TEMP
-RUN msiexec /i C:\TEMP\Bonjour64.msi /qb /quiet
-RUN msiexec /i C:\TEMP\BonjourSDK64.msi /qb /quiet
-
-=======
 RUN C:\Temp\qt.exe --script C:\Temp\qt-installer-noninteractive.qs --platform=minimal --logging-rules "ifw.*=true" --verbose && RD /S /Q C:\Users\%USERNAME%\AppData\Local\Temp
 
-
->>>>>>> d34cca48ac1c2c97dcd645d02eb8bb9fc8f30dba
 # Use developer command prompt and start PowerShell if no other command specified.
 ENTRYPOINT C:\BuildTools\Common7\Tools\VsDevCmd.bat &&
 CMD ["powershell.exe", "-NoLogo", "-ExecutionPolicy", "Bypass"]
