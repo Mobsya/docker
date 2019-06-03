@@ -13,7 +13,7 @@ ARG CHANNEL_URL=https://aka.ms/vs/16/release/channel
 ADD ${CHANNEL_URL} C:\TEMP\VisualStudio.chman
 
 # Download and install Build Tools for Visual Studio 2017 for native desktop workload.
-RUN powershell -Command "Invoke-WebRequest https://aka.ms/vs/16/release/vs_buildtools.exe -OutFile C:\TEMP\vs_buildtools.exe" `
+RUN powershell -Command "Invoke-WebRequest -uri 'https://aka.ms/vs/16/release/vs_buildtools.exe'' -OutFile 'C:\TEMP\vs_buildtools.exe''" `
     && C:\TEMP\vs_buildtools.exe --quiet --wait --norestart --nocache `
     --channelUri C:\TEMP\VisualStudio.chman `
     --installChannelUri C:\TEMP\VisualStudio.chman `
@@ -65,12 +65,12 @@ RUN git clone https://github.com/Microsoft/vcpkg.git C:\vcpkg `
     && RD /S /Q C:\vcpkg\downloads C:\vcpkg\buildtrees C:\vcpkg\packages
 
 # LLVM
-RUN powershell -Command "Invoke-WebRequest http://releases.llvm.org/8.0.0/LLVM-8.0.0-win64.exe  -OutFile C:\Temp\llvm.exe" `
+RUN powershell -Command "Invoke-WebRequest -uri 'http://releases.llvm.org/8.0.0/LLVM-8.0.0-win64.exe' -OutFile 'C:\Temp\llvm.exe''" `
   && 7z x C:\Temp\llvm.exe -oC:\LLVM && setx PATH "%path%;C:\\llvm\\bin" && setx LLD_LINK "C:\\llvm\\bin\\lld-link.exe" && powershell rm C:\Temp\llvm.exe
 
 # QT
 COPY qt-installer-noninteractive.qs C:\TEMP\
-RUN powershell -Command "Invoke-WebRequest https://download.qt.io/official_releases/online_installers/qt-unified-windows-x86-online.exe -OutFile C:\Temp\qt.exe" `
+RUN powershell -Command "Invoke-WebRequest -uri 'https://download.qt.io/official_releases/online_installers/qt-unified-windows-x86-online.exe'' -OutFile 'C:\Temp\qt.exe''" `
  && C:\Temp\qt.exe --script C:\Temp\qt-installer-noninteractive.qs --platform=minimal --logging-rules "ifw.*=true" --verbose `
     && RD /S /Q C:\Users\%USERNAME%\AppData\Local\Temp C:\Qt\Docs C:\Qt\Examples C:\Qt\Tools `
     && powershell rm C:\Temp\qt.exe
