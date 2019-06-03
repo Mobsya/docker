@@ -25,8 +25,7 @@ RUN powershell -Command "Invoke-WebRequest -uri 'https://aka.ms/vs/16/release/vs
     --add Microsoft.Component.VC.Runtime.UCRTSDK `
     --add Microsoft.Component.MSBuild `
     --installPath C:\BuildTools `
-    && RD /S /Q "C:\ProgramData\Package Cache" "C:\TEMP" `
-    && powershell rm C:\TEMP\vs_buildtools.exe
+    && RD /S /Q "C:\ProgramData\Package Cache" "C:\TEMP"
 
 
 # Tools
