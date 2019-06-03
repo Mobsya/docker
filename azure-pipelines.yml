@@ -9,6 +9,7 @@ trigger:
 
 jobs:
 - job:
+  timeoutInMinutes: 360
   displayName: "Build Flatpak Docker Image"
   pool:
     vmImage: 'Ubuntu-16.04'
