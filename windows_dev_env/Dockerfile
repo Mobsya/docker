@@ -14,7 +14,11 @@ ADD ${CHANNEL_URL} C:\TEMP\VisualStudio.chman
 COPY qt-installer-noninteractive.qs C:\TEMP\
 
 # Download and install Build Tools for Visual Studio 2017 for native desktop workload.
-RUN powershell -Command "Invoke-WebRequest 'https://aka.ms/vs/16/release/vs_buildtools.exe' -OutFile 'C:\TEMP\vs_buildtools.exe'" `
+RUN  powershell -Command "Invoke-WebRequest 'https://aka.ms/vs/16/release/vs_buildtools.exe' -OutFile 'C:\TEMP\vs_buildtools.exe'" `
+  && powershell -Command "Invoke-WebRequest 'http://releases.llvm.org/8.0.0/LLVM-8.0.0-win64.exe' -OutFile 'C:\TEMP\llvm.exe'" `
+  && powershell -Command "Invoke-WebRequest 'https://download.qt.io/official_releases/online_installers/qt-unified-windows-x86-online.exe' -OutFile 'C:\Temp\qt.exe'" `
+  && C:\Temp\qt.exe --script C:\Temp\qt-installer-noninteractive.qs --platform=minimal --logging-rules "ifw.*=true" --verbose `
+  && RD /S /Q C:\Users\%USERNAME%\AppData\Local\Temp C:\Qt\Docs C:\Qt\Examples C:\Qt\Tools `
   && C:\TEMP\vs_buildtools.exe --quiet --wait --norestart --nocache `
     --channelUri C:\TEMP\VisualStudio.chman `
     --installChannelUri C:\TEMP\VisualStudio.chman `
@@ -59,13 +63,8 @@ RUN powershell choco feature disable --name showDownloadProgress && choco instal
     boost-smart-ptr:x64-windows-static boost-smart-ptr:x86-windows-static `
     boost-optional:x64-windows-static boost-optional:x86-windows-static `
     openssl:x64-windows openssl:x86-windows `
-  && powershell -Command "Invoke-WebRequest 'http://releases.llvm.org/8.0.0/LLVM-8.0.0-win64.exe' -OutFile 'C:\TEMP\llvm.exe'" `
-  && 7z x C:\Temp\llvm.exe -oC:\LLVM && setx PATH "%path%;C:\\llvm\\bin" && setx LLD_LINK "C:\\llvm\\bin\\lld-link.exe" && powershell rm C:\Temp\llvm.exe `
-  && powershell -Command "Invoke-WebRequest 'https://download.qt.io/official_releases/online_installers/qt-unified-windows-x86-online.exe' -OutFile 'C:\Temp\qt.exe'" `
-  && C:\Temp\qt.exe --script C:\Temp\qt-installer-noninteractive.qs --platform=minimal --logging-rules "ifw.*=true" --verbose `
-  && RD /S /Q C:\Users\%USERNAME%\AppData\Local\Temp C:\Qt\Docs C:\Qt\Examples C:\Qt\Tools `
-  && RD /S /Q C:\vcpkg\downloads C:\vcpkg\buildtrees C:\vcpkg\packages `
-  && powershell rm C:\Temp\llvm.exe && powershell rm C:\Temp\qt.exe
+  && 7z x C:\Temp\llvm.exe -oC:\LLVM && setx PATH "%path%;C:\\llvm\\bin" && setx LLD_LINK "C:\\llvm\\bin\\lld-link.exe"`
+  && RD /S /Q C:\vcpkg\downloads C:\vcpkg\buildtrees C:\vcpkg\packages C:\Temp`
 
 # Use developer command prompt and start PowerShell if no other command specified.
 #ENTRYPOINT C:\BuildTools\Common7\Tools\VsDevCmd.bat &&
