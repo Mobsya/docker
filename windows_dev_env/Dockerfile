@@ -34,7 +34,7 @@ RUN powershell choco feature disable --name showDownloadProgress && choco instal
   && choco install nodejs ninja 7zip nsis -y --ignoredetectedreboot -ignore-package-exit-codes `
   && powershell choco install cmake -y --ignoredetectedreboot -ignore-package-exit-codes --installargs 'ADD_CMAKE_TO_PATH=System' `
   && setx PATH "%path%;C:\\Program Files (x86)\\NSIS" `
-  && git clone https://github.com/Microsoft/vcpkg.git C:\vcpkg `
+  && "C:\Program Files\Git\bin\git" clone https://github.com/Microsoft/vcpkg.git C:\vcpkg `
   && C:\BuildTools\Common7\Tools\VsDevCmd.bat `
   && C:\vcpkg\bootstrap-vcpkg.bat -Verbose `
   && C:\BuildTools\Common7\Tools\VsDevCmd.bat && C:\vcpkg\vcpkg.exe install `
