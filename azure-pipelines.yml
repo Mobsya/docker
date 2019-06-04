@@ -23,6 +23,26 @@ jobs:
       workingDirectory: flatpak
       displayName: "Build Flatpak image"
 
+
+- job:
+  timeoutInMinutes: 360
+  displayName: "Build Flatpak ARM 64 Image"
+  pool:
+    vmImage: 'Ubuntu-16.04'
+  variables:
+    - group: passwords
+  steps:
+    - script: |
+        sudo apt-get install qemu qemu-user binfmt-support qemu-user-static
+        sudo mount binfmt_misc -t binfmt_misc /proc/sys/fs/binfmt_misc
+        sudo update-binfmts --enable qemu-arm
+        sudo update-binfmts --enable qemu-aarch64
+        docker build -t mobsya/flatpak-builders:kde-latest-arm64 .
+        docker login -u cor3ntinmobsya -p $(corentin-docker)
+        docker push mobsya/flatpak-builders
+      workingDirectory: flatpak-aarch64
+      displayName: "Build Flatpak image"
+
 - job:
   displayName: "Build Linux Dev Environment Docker Image"
   pool:
