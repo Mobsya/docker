@@ -14,5 +14,5 @@ RUN flatpak remote-add flathub https://dl.flathub.org/repo/flathub.flatpakrepo &
 && flatpak install flathub org.kde.Platform/arm/5.12 -y `
 && flatpak install flathub org.kde.Sdk/aarch64/5.12 -y `
 && flatpak install flathub org.kde.Platform/aarch64/5.12 -y `
-&& mount binfmt_misc -t binfmt_misc /proc/sys/fs/binfmt_misc
+&& mount binfmt_misc -t binfmt_misc /proc/sys/fs/binfmt_misc `
 && /etc/init.d/binfmt-support start
