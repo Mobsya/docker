@@ -26,7 +26,7 @@ RUN powershell -Command "Invoke-WebRequest 'https://aka.ms/vs/16/release/vs_buil
     --add Microsoft.Component.VC.Runtime.UCRTSDK `
     --add Microsoft.Component.MSBuild `
     --installPath C:\BuildTools `
-  && RD /S /Q "C:\ProgramData\Package Cache" "C:\TEMP" `
+  && RD /S /Q "C:\ProgramData\Package Cache" `
   && powershell -NoProfile -ExecutionPolicy unrestricted -Command "iex ((new-object net.webclient).DownloadString('https://chocolatey.org/install.ps1'))" `
   && SET PATH=%PATH%;%ALLUSERSPROFILE%\chocolatey\bin
 
@@ -59,13 +59,13 @@ RUN powershell choco feature disable --name showDownloadProgress && choco instal
     boost-smart-ptr:x64-windows-static boost-smart-ptr:x86-windows-static `
     boost-optional:x64-windows-static boost-optional:x86-windows-static `
     openssl:x64-windows openssl:x86-windows `
-  && RD /S /Q C:\vcpkg\downloads C:\vcpkg\buildtrees C:\vcpkg\packages `
-  && powershell -Command "Invoke-WebRequest 'http://releases.llvm.org/8.0.0/LLVM-8.0.0-win64.exe' -OutFile 'C:\Temp\llvm.exe'" `
+  && powershell -Command "Invoke-WebRequest 'http://releases.llvm.org/8.0.0/LLVM-8.0.0-win64.exe' -OutFile 'C:\TEMP\llvm.exe'" `
   && 7z x C:\Temp\llvm.exe -oC:\LLVM && setx PATH "%path%;C:\\llvm\\bin" && setx LLD_LINK "C:\\llvm\\bin\\lld-link.exe" && powershell rm C:\Temp\llvm.exe `
   && powershell -Command "Invoke-WebRequest 'https://download.qt.io/official_releases/online_installers/qt-unified-windows-x86-online.exe' -OutFile 'C:\Temp\qt.exe'" `
   && C:\Temp\qt.exe --script C:\Temp\qt-installer-noninteractive.qs --platform=minimal --logging-rules "ifw.*=true" --verbose `
   && RD /S /Q C:\Users\%USERNAME%\AppData\Local\Temp C:\Qt\Docs C:\Qt\Examples C:\Qt\Tools `
-  && powershell rm C:\Temp\qt.exe
+  && RD /S /Q C:\vcpkg\downloads C:\vcpkg\buildtrees C:\vcpkg\packages `
+  && powershell rm C:\Temp\llvm.exe && powershell rm C:\Temp\qt.exe
 
 # Use developer command prompt and start PowerShell if no other command specified.
 #ENTRYPOINT C:\BuildTools\Common7\Tools\VsDevCmd.bat &&
