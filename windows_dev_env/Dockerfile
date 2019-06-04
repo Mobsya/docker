@@ -60,7 +60,7 @@ RUN powershell choco feature disable --name showDownloadProgress && choco instal
     boost-optional:x64-windows-static boost-optional:x86-windows-static `
     openssl:x64-windows openssl:x86-windows `
   && RD /S /Q C:\vcpkg\downloads C:\vcpkg\buildtrees C:\vcpkg\packages `
-  && powershell -Command "Invoke-WebRequest 'http://releases.llvm.org/8.0.0/LLVM-8.0.0-win64.exe' -OutFile 'C:\Temp\llvm.exe''" `
+  && powershell -Command "Invoke-WebRequest 'http://releases.llvm.org/8.0.0/LLVM-8.0.0-win64.exe' -OutFile 'C:\Temp\llvm.exe'" `
   && 7z x C:\Temp\llvm.exe -oC:\LLVM && setx PATH "%path%;C:\\llvm\\bin" && setx LLD_LINK "C:\\llvm\\bin\\lld-link.exe" && powershell rm C:\Temp\llvm.exe `
   && powershell -Command "Invoke-WebRequest 'https://download.qt.io/official_releases/online_installers/qt-unified-windows-x86-online.exe' -OutFile 'C:\Temp\qt.exe'" `
   && C:\Temp\qt.exe --script C:\Temp\qt-installer-noninteractive.qs --platform=minimal --logging-rules "ifw.*=true" --verbose `
