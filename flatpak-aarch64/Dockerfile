@@ -1,11 +1,15 @@
 # escape=`
 
-FROM arm64v8/ubuntu:cosmic
+FROM arm64v8/fedora:latest
 MAINTAINER Corentin Jabot <corentinjabot@mobsya.org>
 
 VOLUME /build
 WORKDIR /build
 COPY --from=multiarch/qemu-user-static:x86_64-aarch64 /usr/bin/qemu-* /usr/bin
 ENV FLATPAK_GL_DRIVERS=dummy
-RUN apt-get update && apt-get install -y ca-certificates bash flatpak-builder flatpak git ostree gsettings-desktop-schemas
-RUN flatpak remote-add --user flathub https://dl.flathub.org/repo/flathub.flatpakrepo
+
+RUN dnf update -y && dnf install -y flatpak flatpak-builder git-all sudo ccache gnupg && dnf clean all
+
+RUN echo '%wheel ALL=(ALL) NOPASSWD: ALL' >> /etc/sudoers
+RUN chmod u+s $(/bin/which bwrap) $(/bin/which flatpak) $(/bin/which flatpak-builder)
+RUN flatpak remote-add --if-not-exists --user flathub https://dl.flathub.org/repo/flathub.flatpakrepo
