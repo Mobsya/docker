@@ -41,27 +41,27 @@ RUN powershell choco feature disable --name showDownloadProgress && choco instal
   && C:\BuildTools\Common7\Tools\VsDevCmd.bat `
   && C:\vcpkg\bootstrap-vcpkg.bat -Verbose `
   && C:\BuildTools\Common7\Tools\VsDevCmd.bat && C:\vcpkg\vcpkg.exe install `
-    boost-beast:x64-windows-static boost-beast:x86-windows-static `
-    boost-filesystem:x64-windows-static boost-filesystem:x86-windows-static `
-    boost-interprocess:x64-windows-static boost-interprocess:x86-windows-static `
-    boost-endian:x64-windows-static boost-endian:x86-windows-static `
-    boost-container-hash:x64-windows-static boost-container-hash:x86-windows-static `
-    boost-endian:x64-windows-static boost-endian:x86-windows-static `
-    boost-lexical-cast:x64-windows-static boost-lexical-cast:x86-windows-static `
-    boost-program-options:x64-windows-static boost-program-options:x86-windows-static `
-    boost-scope-exit:x64-windows-static boost-scope-exit:x86-windows-static `
-    boost-signals2:x64-windows-static boost-signals2:x86-windows-static `
-    boost-utility:x64-windows-static boost-utility:x86-windows-static `
-    boost-uuid:x64-windows-static boost-uuid:x86-windows-static `
-    boost-bind:x64-windows-static boost-bind:x86-windows-static `
-    boost-chrono:x64-windows-static boost-chrono:x86-windows-static `
-    boost-date-time:x64-windows-static boost-date-time:x86-windows-static `
-    boost-type-traits:x64-windows-static boost-type-traits:x86-windows-static `
-    boost-static-assert:x64-windows-static boost-static-assert:x86-windows-static `
-    boost-function:x64-windows-static boost-function:x86-windows-static `
-    boost-smart-ptr:x64-windows-static boost-smart-ptr:x86-windows-static `
-    boost-optional:x64-windows-static boost-optional:x86-windows-static `
-    openssl:x64-windows openssl:x86-windows `
+    boost-beast:x64-windows-static `
+    boost-filesystem:x64-windows-static `
+    boost-interprocess:x64-windows-static `
+    boost-endian:x64-windows-static `
+    boost-container-hash:x64-windows-static`
+    boost-endian:x64-windows-static `
+    boost-lexical-cast:x64-windows-static `
+    boost-program-options:x64-windows-static `
+    boost-scope-exit:x64-windows-static `
+    boost-signals2:x64-windows-static `
+    boost-utility:x64-windows-static  `
+    boost-uuid:x64-windows-static `
+    boost-bind:x64-windows-static `
+    boost-chrono:x64-windows-static `
+    boost-date-time:x64-windows-static `
+    boost-type-traits:x64-windows-static `
+    boost-static-assert:x64-windows-static `
+    boost-function:x64-windows-static `
+    boost-smart-ptr:x64-windows-static `
+    boost-optional:x64-windows-static `
+    openssl:x64-windows `
   && 7z x C:\Temp\llvm.exe -oC:\LLVM && setx PATH "%path%;C:\\llvm\\bin" && setx LLD_LINK "C:\\llvm\\bin\\lld-link.exe" `
   && (RD /S /Q C:\vcpkg\downloads C:\vcpkg\buildtrees C:\vcpkg\packages C:\Temp || echo "Unable to remove filees!") `
 

@@ -28,9 +28,6 @@ Controller.prototype.ComponentSelectionPageCallback = function() {
     widget.deselectAll();
     widget.selectComponent("qt.qt5.5123.qtcharts")
     widget.selectComponent("qt.qt5.5123.qtwebengine")
-    widget.selectComponent("qt.qt5.5123.win32_msvc2017")
-    widget.selectComponent("qt.qt5.5123.qtcharts.win32_msvc2017")
-    widget.selectComponent("qt.qt5.5123.qtwebengine.win32_msvc2017")
     widget.selectComponent("qt.qt5.5123.win64_msvc2017_64")
     widget.selectComponent("qt.qt5.5123.qtcharts.win64_msvc2017_64")
     widget.selectComponent("qt.qt5.5123.qtwebengine.win64_msvc2017_64")
