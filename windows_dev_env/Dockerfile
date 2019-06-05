@@ -62,7 +62,7 @@ RUN  powershell -Command "Invoke-WebRequest 'https://aka.ms/vs/16/release/vs_bui
     boost-smart-ptr:x64-windows-static `
     boost-optional:x64-windows-static `
     openssl:x64-windows `
-  && 7z x C:\Temp\llvm.exe -oC:\LLVM && setx PATH "%path%;C:\\llvm\\bin" && setx LLD_LINK "C:\\llvm\\bin\\lld-link.exe" `
+  && "C:\Program Files\7-Zip\7z" x C:\Temp\llvm.exe -oC:\LLVM && setx PATH "%path%;C:\\llvm\\bin" && setx LLD_LINK "C:\\llvm\\bin\\lld-link.exe" `
   && (RD /S /Q C:\vcpkg\downloads C:\vcpkg\buildtrees C:\vcpkg\packages C:\Temp || echo "Unable to remove files!") `
   && C:\ProgramData\chocolatey\lib\choco-cleaner\tools\Choco-Cleaner-manual.bat
 

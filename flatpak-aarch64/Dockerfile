@@ -5,6 +5,7 @@ MAINTAINER Corentin Jabot <corentinjabot@mobsya.org>
 
 VOLUME /build
 WORKDIR /build
+COPY --from=multiarch/qemu-user-static:x86_64-aarch64 /usr/bin/qemu-* /usr/bin
 ENV FLATPAK_GL_DRIVERS=dummy
 
 RUN dnf update -y && dnf install -y flatpak flatpak-builder git-all sudo ccache gnupg && dnf clean all
