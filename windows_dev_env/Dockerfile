@@ -31,8 +31,8 @@ RUN  powershell -Command "Invoke-WebRequest 'https://aka.ms/vs/16/release/vs_bui
     --installPath C:\BuildTools `
   && powershell -NoProfile -ExecutionPolicy unrestricted -Command "iex ((new-object net.webclient).DownloadString('https://chocolatey.org/install.ps1'))" `
   && SET PATH=%PATH%;%ALLUSERSPROFILE%\chocolatey\bin `
-  && (RD /S /Q "C:\Users\%USERNAME%\AppData\Local\Temp" C:\Qt\Docs C:\Qt\Examples C:\Qt\Tools "C:\ProgramData\Package Cache" 2>nul || echo "Unable to remove file!")`
-  && C:\ProgramData\chocolatey\choco.exe feature disable --name showDownloadProgress
+  && (RD /S /Q "C:\Users\%USERNAME%\AppData\Local\Temp" C:\Qt\Docs C:\Qt\Examples C:\Qt\Tools "C:\ProgramData\Package Cache" 2>nul || echo "Unable to remove file!") `
+  && C:\ProgramData\chocolatey\choco.exe feature disable --name showDownloadProgress `
   && C:\ProgramData\chocolatey\choco.exe install git.install -y --params "'/GitAndUnixToolsOnPath /NoAutoCrlf'" `
   && C:\ProgramData\chocolatey\choco.exe install choco-cleaner nodejs ninja 7zip nsis -y --ignoredetectedreboot -ignore-package-exit-codes `
   && C:\ProgramData\chocolatey\choco.exe install cmake -y --ignoredetectedreboot -ignore-package-exit-codes --installargs 'ADD_CMAKE_TO_PATH=System' `
