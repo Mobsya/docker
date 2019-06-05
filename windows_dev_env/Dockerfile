@@ -34,7 +34,7 @@ RUN  powershell -Command "Invoke-WebRequest 'https://aka.ms/vs/16/release/vs_bui
   && (RD /S /Q "C:\Users\%USERNAME%\AppData\Local\Temp" C:\Qt\Docs C:\Qt\Examples C:\Qt\Tools "C:\ProgramData\Package Cache" 2>nul || echo "Unable to remove file!")
 
 RUN powershell choco feature disable --name showDownloadProgress && choco install git.install -y --params "'/GitAndUnixToolsOnPath /NoAutoCrlf'" `
-  && choco install nodejs ninja 7zip nsis -y --ignoredetectedreboot -ignore-package-exit-codes `
+  && choco install choco-cleaner nodejs ninja 7zip nsis -y --ignoredetectedreboot -ignore-package-exit-codes `
   && powershell choco install cmake -y --ignoredetectedreboot -ignore-package-exit-codes --installargs 'ADD_CMAKE_TO_PATH=System' `
   && setx PATH "%path%;C:\\Program Files (x86)\\NSIS" `
   && "C:\Program Files\Git\bin\git" clone https://github.com/Microsoft/vcpkg.git C:\vcpkg `
@@ -63,7 +63,8 @@ RUN powershell choco feature disable --name showDownloadProgress && choco instal
     boost-optional:x64-windows-static `
     openssl:x64-windows `
   && 7z x C:\Temp\llvm.exe -oC:\LLVM && setx PATH "%path%;C:\\llvm\\bin" && setx LLD_LINK "C:\\llvm\\bin\\lld-link.exe" `
-  && (RD /S /Q C:\vcpkg\downloads C:\vcpkg\buildtrees C:\vcpkg\packages C:\Temp || echo "Unable to remove filees!") `
+  && (RD /S /Q C:\vcpkg\downloads C:\vcpkg\buildtrees C:\vcpkg\packages C:\Temp || echo "Unable to remove files!") `
+  && C:\ProgramData\chocolatey\lib\choco-cleaner\tools\Choco-Cleaner-manual.bat
 
 # Use developer command prompt and start PowerShell if no other command specified.
 #ENTRYPOINT C:\BuildTools\Common7\Tools\VsDevCmd.bat &&
