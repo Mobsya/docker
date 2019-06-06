@@ -23,26 +23,6 @@ jobs:
       workingDirectory: flatpak
       displayName: "Build Flatpak image"
 
-
-- job:
-  timeoutInMinutes: 360
-  displayName: "Build Flatpak ARM 64 Image"
-  pool:
-    vmImage: 'Ubuntu-16.04'
-  variables:
-    - group: passwords
-  steps:
-    - script: |
-        sudo apt-get install qemu qemu-user binfmt-support qemu-user-static
-        sudo mount binfmt_misc -t binfmt_misc /proc/sys/fs/binfmt_misc
-        sudo update-binfmts --enable qemu-arm
-        sudo update-binfmts --enable qemu-aarch64
-        docker build -t mobsya/flatpak-builders:kde-latest-arm64 .
-        docker login -u cor3ntinmobsya -p $(corentin-docker)
-        docker push mobsya/flatpak-builders
-      workingDirectory: flatpak-aarch64
-      displayName: "Build Flatpak image"
-
 - job:
   displayName: "Build Linux Dev Environment Docker Image"
   pool:
@@ -57,6 +37,28 @@ jobs:
       workingDirectory: linux_dev_env
       displayName: "Build Linux Dev Env image"
 
+- job:
+  timeoutInMinutes: 360
+  displayName: "Build Android Dev Environment Docker Image"
+  pool:
+    vmImage: 'Ubuntu-16.04'
+  variables:
+  - group: passwords
+  strategy:
+    matrix:
+      armeabi:
+        TARGET_ARCH: 'armeabi-v7a'
+      aarch64:
+        TARGET_ARCH: 'arm64-v8a'
+      x86_64:
+        TARGET_ARCH: 'x86_64'
+  steps:
+    - script: |
+        docker build -t mobsya/android-dev-env:$TARGET_ARCH --build-arg TARGET_ARCH=$TARGET_ARCH .
+        docker login -u cor3ntinmobsya -p $(corentin-docker)
+        docker push mobsya/android-dev-env
+      workingDirectory: android_dev_env
+      displayName: "Build Android Dev Env image"
 
 - job:
   timeoutInMinutes: 360
