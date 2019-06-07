@@ -18,7 +18,7 @@ COPY build-qt.sh /
 RUN arch=$TARGET_ARCH bash -x build-qt.sh
 
 FROM ubuntu:cosmic
-RUN apt-get update && apt-get install git p7zip build-essential perl python npm nodejs ninja-build unzip wget openjdk-8-jre openjdk-8-jdk -y --no-install-recommends && apt-get clean
+RUN apt-get update && apt-get install doxygen pkg-config python3 git p7zip build-essential perl python npm nodejs ninja-build unzip wget openjdk-8-jre openjdk-8-jdk -y --no-install-recommends && apt-get clean
 RUN update-alternatives --set java /usr/lib/jvm/java-8-openjdk-amd64/jre/bin/java
 COPY --from=stage1 /android/sdk /android/sdk
 COPY --from=stage1 /Qt /Qt
