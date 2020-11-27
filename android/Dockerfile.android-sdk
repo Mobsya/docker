@@ -1,0 +1,17 @@
+FROM ubuntu:18.04
+
+# From https://doc.qt.io/qt-5/android-building.html (limited dependencies compared to https://wiki.qt.io/Android)
+RUN apt update && apt install -y -q wget build-essential openjdk-8-jdk-headless android-sdk && rm -rf /var/lib/apt/lists/*
+
+ENV JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64
+ENV PATH=${PATH}:${JAVA_HOME}/bin
+
+WORKDIR /android
+COPY install-sdk.sh .
+
+ARG API_LEVEL
+ARG NDK_VERSION
+RUN ./install-sdk.sh
+
+ENV ANDROID_SDK_PATH=/usr/lib/android-sdk
+ENV ANDROID_NDK_PATH=/android/ndk/android-ndk-r${NDK_VERSION}

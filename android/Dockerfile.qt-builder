@@ -1,0 +1,24 @@
+ARG API_LEVEL
+ARG NDK_VERSION
+
+FROM mobsya/android-sdk:android${API_LEVEL}-ndk${NDK_VERSION} as builder
+
+WORKDIR /src
+
+ARG QT_BASE_VERSION
+ARG QT_PATCH_NUMBER
+ARG QT_VERSION=${QT_BASE_VERSION}.${QT_PATCH_NUMBER}
+
+RUN wget http://download.qt.io/official_releases/qt/${QT_BASE_VERSION}/${QT_VERSION}/single/qt-everywhere-src-${QT_VERSION}.tar.xz && tar xf qt-everywhere-src-${QT_VERSION}.tar.xz
+
+COPY build-qt.sh .
+
+# From https://wiki.qt.io/Building_Qt_5_from_Git
+RUN apt update && apt install -y -q python && rm -rf /var/lib/apt/lists/*
+
+ARG API_LEVEL
+RUN ./build-qt.sh
+
+FROM mobsya/android-sdk:android${API_LEVEL}-ndk${NDK_VERSION}
+COPY --from=builder /qt /qt
+WORKDIR /qt
