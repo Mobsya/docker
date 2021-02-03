@@ -97,6 +97,6 @@ done
 
 ##  Building Images
 
-Run the `build-docker-images.sh` script in order to build each image. Use `build-docker-images.sh --push` in order to push the generated images to the repository.
+Go into the `<platform>/docker/` folder and run the `build-docker-images.sh` script in order to build each image. Use `build-docker-images.sh --push` in order to push the generated images to the repository.
 
 In order to upgrade the build environment, edit the `build-docker-images.sh` script and change the variables at the top of the file before running it.

@@ -38,9 +38,6 @@ if [ ! -d "$SRC_DIR/scratch" ]; then
   rm scratch-gui.tar.gz
 fi
 
-echo API_LEVEL=$API_LEVEL > .env
-echo DEV_ENVIRONMENT_TAG=$DEV_ENVIRONMENT_TAG  >> .env
-echo SRC_DIR=$SRC_DIR >> .env
-echo BUILD_DIR=$BUILD_DIR >> .env
+(echo export API_LEVEL=$API_LEVEL; echo export DEV_ENVIRONMENT_TAG=$DEV_ENVIRONMENT_TAG; echo export SRC_DIR=$SRC_DIR; echo export BUILD_DIR=$BUILD_DIR) > .build-env
 
-echo --- Type . .env to source the environment variables.
+echo --- Type . .build-env to source the environment variables.

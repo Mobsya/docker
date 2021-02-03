@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Setup env and load variable in current shell.
-./setup-thymio-dev-env.sh && . .env
+./setup-thymio-dev-env.sh && . .build-env
 
 # Build all targets
 build_types="Debug Release"
