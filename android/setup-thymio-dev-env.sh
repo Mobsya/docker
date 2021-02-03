@@ -1,8 +1,8 @@
 #!/bin/bash
 
-API_LEVEL=21
-DEV_ENVIRONMENT_TAG=android${API_LEVEL}-ndk21-qt5.15.2-cmake3.19.3
-
+if [ -z "$API_LEVEL" ]; then
+  read -p "Enter the desired Android API level (Android build platform, e.g. 21, 24 or 28): " API_LEVEL
+fi
 if [ ! -f "$SRC_DIR/CMakeLists.txt" ]; then
   echo --- "$SRC_DIR/CMakeLists.txt" not found. We need to define the source dir.
   SRC_DIR=
@@ -21,6 +21,8 @@ if [ -z "$BUILD_DIR" ]; then
   echo --- The build folder is undefined. Aborting.
   exit 1
 fi
+
+DEV_ENVIRONMENT_TAG=android${API_LEVEL}-ndk21-qt5.15.2-cmake3.19.3
 
 if [ ! -d "$SRC_DIR/vpl3-thymio-suite" ]; then
   echo ---Download assets into ${SRC_DIR}

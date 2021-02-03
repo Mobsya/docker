@@ -36,6 +36,7 @@ vpl3_url="https://github.com/Mobsya/ci-data/releases/download/data/vpl3-thymio-s
 wget ${scratch_url} && tar xzf scratch-gui.tar.gz -C ${SRC_DIR} && rm scratch-gui.tar.gz
 wget ${vpl3_url} && tar xzf vpl3-thymio-suite.tar.gz -C ${SRC_DIR} && rm vpl3-thymio-suite.tar.gz
 ```
+**The result from the example above can be achieved in one command: `./setup-thymio-dev-env.sh`**
 
 The image provides two volumes for its containers:
 
@@ -45,7 +46,7 @@ The image provides two volumes for its containers:
 It is strongly suggested using an out of tree build strategy targeting the /build volume of the container in order to keep the source code clean. For instance, you may use -S and -B options of cmake. Here is an example for building just one target:
 
 ```bash
-# Build environment
+# Build environment (note that running ./setup-thymio-dev-env.sh will take care of this part)
 SRC_DIR=$(pwd)/aseba
 BUILD_DIR=$(pwd)/aseba-build
 API_LEVEL=21
