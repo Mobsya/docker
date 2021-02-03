@@ -92,7 +92,7 @@ for build_type in $build_types; do
 done
 ```
 
-
+**The result from the example above can be achieved in one command: `./build-thymio.sh`**
 
 ##  Building Images
 
