@@ -19,7 +19,7 @@ Each tag gives the platform, the tool chain version and the tag for the built ve
 
 ### mobsya/thymio-dev-env
 
-This image provides a clean, self-container development environment for building Thymio Suite on a specific platform with a specific tool chain.
+This image provides a clean, self-contained development environment for building Thymio Suite on a specific platform with a specific tool chain.
 
 Each tag gives the platform, the tool chain version and the tag for the built version of Qt. The latest part of the tag gives the desired version of CMake.
 
