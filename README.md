@@ -49,8 +49,8 @@ It is strongly suggested using an out of tree build strategy targeting the /buil
 # Build environment (note that running ./setup-thymio-dev-env.sh will take care of this part)
 SRC_DIR=$(pwd)/aseba
 BUILD_DIR=$(pwd)/aseba-build
-API_LEVEL=21
-DEV_ENVIRONMENT_TAG=android${API_LEVEL}-ndk21-qt5.15.2-cmake3.19.3
+API_LEVEL=24
+DEV_ENVIRONMENT_TAG=android${API_LEVEL}-ndk21-qt5.15.2-cmake3.19.4
 
 # Build target
 build_type=Debug
@@ -75,8 +75,8 @@ Here is an example for building Thymio for several architectures (one build fold
 # Build environment
 SRC_DIR=$(pwd)/aseba
 BUILD_DIR=$(pwd)/aseba-build
-API_LEVEL=21
-DEV_ENVIRONMENT_TAG=android${API_LEVEL}-ndk21-qt5.15.2-cmake3.19.3
+API_LEVEL=24
+DEV_ENVIRONMENT_TAG=android${API_LEVEL}-ndk21-qt5.15.2-cmake3.19.4
 
 # Build all targets
 build_types="Debug Release"

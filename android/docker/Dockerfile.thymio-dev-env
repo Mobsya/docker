@@ -11,8 +11,9 @@ FROM mobsya/android-sdk:android${THYMIO_API_LEVEL}-ndk${NDK_VERSION}
 COPY --from=qt /qt /qt
 
 
-# Required for compiling custom CMake (libssl-dev) or required to build Thymio Suite
-RUN apt update && apt install -y -q libssl-dev python3 ninja-build && rm -rf /var/lib/apt/lists/*
+# Install required packages for compiling custom CMake (libssl-dev) or required to build Thymio Suite. The git package
+# is required by Aseba Common lib to obtain the Git revision at build time and publish it as a static variable.
+RUN apt update && apt install -y -q libssl-dev python3 ninja-build git && rm -rf /var/lib/apt/lists/*
 
 # Install CMake >= 3.13 (minimum required version).
 ARG CMAKE_VERSION=3.19.2

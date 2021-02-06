@@ -4,9 +4,9 @@ echo "===== Configuration ====="
 QT_BASE_VERSION=5.15
 QT_PATCH_NUMBER=2
 QT_API_LEVEL=28
-THYMIO_API_LEVEL=21   # SDK API 21 is compatible with Android 5 Lollipop
+THYMIO_API_LEVEL=24   # SDK API 21 is compatible with Android 5 Lollipop, SDK API 24 is compatible with Android 7.
 NDK_VERSION=21        # As of Qt 5.14, Qt 5.13.2+ and Qt 5.12.6+, the latest Android NDK (r20b or r21) is required.
-CMAKE_VERSION=3.19.3
+CMAKE_VERSION=3.19.4
 echo "-------------------------"
 
 set -e

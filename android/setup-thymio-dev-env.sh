@@ -1,5 +1,11 @@
 #!/bin/bash
 
+echo "===== Configuration ====="
+QT_VERSION=5.15.2
+NDK_VERSION=21        # As of Qt 5.14, Qt 5.13.2+ and Qt 5.12.6+, the latest Android NDK (r20b or r21) is required.
+CMAKE_VERSION=3.19.4
+echo "-------------------------"
+
 if [ -z "$API_LEVEL" ]; then
   read -p "Enter the desired Android API level (Android build platform, e.g. 21, 24 or 28): " API_LEVEL
 fi
@@ -22,7 +28,7 @@ if [ -z "$BUILD_DIR" ]; then
   exit 1
 fi
 
-DEV_ENVIRONMENT_TAG=android${API_LEVEL}-ndk21-qt5.15.2-cmake3.19.3
+DEV_ENVIRONMENT_TAG=android${API_LEVEL}-ndk${NDK_VERSION}-qt${QT_VERSION}-cmake${CMAKE_VERSION}
 
 if [ ! -d "$SRC_DIR/vpl3-thymio-suite" ]; then
   echo ---Download assets into ${SRC_DIR}
