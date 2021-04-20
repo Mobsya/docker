@@ -3,11 +3,11 @@
 echo "===== Configuration ====="
 QT_VERSION=5.15.2
 NDK_VERSION=21        # As of Qt 5.14, Qt 5.13.2+ and Qt 5.12.6+, the latest Android NDK (r20b or r21) is required.
-CMAKE_VERSION=3.19.4
+CMAKE_VERSION=3.19.7
 echo "-------------------------"
 
 if [ -z "$API_LEVEL" ]; then
-  read -p "Enter the desired Android API level (Android build platform, e.g. 21, 24 or 28): " API_LEVEL
+  read -p "Enter the desired Android API level (Android build platform, e.g. 21, 24, 28 or 29): " API_LEVEL
 fi
 if [ ! -f "$SRC_DIR/CMakeLists.txt" ]; then
   echo --- "$SRC_DIR/CMakeLists.txt" not found. We need to define the source dir.
