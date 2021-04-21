@@ -24,7 +24,7 @@ RUN wget https://github.com/Kitware/CMake/releases/download/v${CMAKE_VERSION}/cm
     && make -j$(nproc) \
     && make install \
     && cd .. \
-    && rm -R cmake-${CMAKE_VERSION}
+    && rm -R cmake-${CMAKE_VERSION}.tar.gz
 
 WORKDIR /src
 VOLUME /src
