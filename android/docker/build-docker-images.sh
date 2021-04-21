@@ -18,7 +18,7 @@ docker build -t mobsya/android-sdk:android${QT_API_LEVEL}-ndk${NDK_VERSION} --bu
 docker build -t mobsya/android-sdk:android${THYMIO_API_LEVEL}-ndk${NDK_VERSION} --build-arg NDK_VERSION=${NDK_VERSION} --build-arg API_LEVEL=${THYMIO_API_LEVEL} -f Dockerfile.android-sdk .
 
 echo --- Building Qt ${QT_BASE_VERSION}.${QT_PATCH_NUMBER} for Android with API level $QT_API_LEVEL, and NDK version $NDK_VERSION
-#docker build -t mobsya/qt-builder:android${QT_API_LEVEL}-ndk${NDK_VERSION}-qt${QT_BASE_VERSION}.${QT_PATCH_NUMBER} --build-arg NDK_VERSION=${NDK_VERSION} --build-arg API_LEVEL=${QT_API_LEVEL} --build-arg QT_BASE_VERSION=${QT_BASE_VERSION} --build-arg QT_PATCH_NUMBER=${QT_PATCH_NUMBER} -f Dockerfile.qt-builder .
+docker build -t mobsya/qt-builder:android${QT_API_LEVEL}-ndk${NDK_VERSION}-qt${QT_BASE_VERSION}.${QT_PATCH_NUMBER} --build-arg NDK_VERSION=${NDK_VERSION} --build-arg API_LEVEL=${QT_API_LEVEL} --build-arg QT_BASE_VERSION=${QT_BASE_VERSION} --build-arg QT_PATCH_NUMBER=${QT_PATCH_NUMBER} -f Dockerfile.qt-builder .
 
 echo --- Creating development environment for Qt ${QT_BASE_VERSION}.${QT_PATCH_NUMBER}
 docker build -t mobsya/thymio-dev-env:android${THYMIO_API_LEVEL}-ndk${NDK_VERSION}-qt${QT_BASE_VERSION}.${QT_PATCH_NUMBER}-cmake${CMAKE_VERSION} --build-arg NDK_VERSION=${NDK_VERSION} --build-arg QT_API_LEVEL=${QT_API_LEVEL} --build-arg THYMIO_API_LEVEL=${THYMIO_API_LEVEL} --build-arg QT_BASE_VERSION=${QT_BASE_VERSION} --build-arg QT_PATCH_NUMBER=${QT_PATCH_NUMBER} --build-arg CMAKE_VERSION=${CMAKE_VERSION} -f Dockerfile.thymio-dev-env .
