@@ -20,7 +20,9 @@ docker build -t mobsya/android-sdk:android${THYMIO_BUILD_API_LEVEL}-ndk${NDK_VER
 docker build -t mobsya/android-sdk:android${THYMIO_DEPLOYMENT_TARGET_API_LEVEL}-ndk${NDK_VERSION} --build-arg NDK_VERSION=${NDK_VERSION} --build-arg API_LEVEL=${THYMIO_DEPLOYMENT_TARGET_API_LEVEL} -f Dockerfile.android-sdk .
 
 echo --- Building Qt ${QT_BASE_VERSION}.${QT_PATCH_NUMBER} for Android with API level $QT_BUILD_API_LEVEL, and NDK version $NDK_VERSION
-docker build -t mobsya/qt-builder:android${QT_BUILD_API_LEVEL}-ndk${NDK_VERSION}-qt${QT_BASE_VERSION}.${QT_PATCH_NUMBER} --build-arg NDK_VERSION=${NDK_VERSION} --build-arg API_LEVEL=${QT_BUILD_API_LEVEL} --build-arg QT_BASE_VERSION=${QT_BASE_VERSION} --build-arg QT_PATCH_NUMBER=${QT_PATCH_NUMBER} -f Dockerfile.qt-builder .
+if [ "$1" != "--no-qt-build" ]; then
+  docker build -t mobsya/qt-builder:android${QT_BUILD_API_LEVEL}-ndk${NDK_VERSION}-qt${QT_BASE_VERSION}.${QT_PATCH_NUMBER} --build-arg NDK_VERSION=${NDK_VERSION} --build-arg API_LEVEL=${QT_BUILD_API_LEVEL} --build-arg QT_BASE_VERSION=${QT_BASE_VERSION} --build-arg QT_PATCH_NUMBER=${QT_PATCH_NUMBER} -f Dockerfile.qt-builder .
+fi
 
 echo --- Creating development environment for Qt ${QT_BASE_VERSION}.${QT_PATCH_NUMBER}
 docker build -t mobsya/thymio-dev-env:android${THYMIO_BUILD_API_LEVEL}-ndk${NDK_VERSION}-qt${QT_BASE_VERSION}.${QT_PATCH_NUMBER}-cmake${CMAKE_VERSION} --build-arg NDK_VERSION=${NDK_VERSION} --build-arg QT_BUILD_API_LEVEL=${QT_BUILD_API_LEVEL} --build-arg THYMIO_BUILD_API_LEVEL=${THYMIO_BUILD_API_LEVEL} --build-arg THYMIO_DEPLOYMENT_TARGET_API_LEVEL=${THYMIO_DEPLOYMENT_TARGET_API_LEVEL} --build-arg QT_BASE_VERSION=${QT_BASE_VERSION} --build-arg QT_PATCH_NUMBER=${QT_PATCH_NUMBER} --build-arg CMAKE_VERSION=${CMAKE_VERSION} -f Dockerfile.thymio-dev-env .
@@ -35,7 +37,7 @@ echo - mobsya/android-sdk:android${THYMIO_DEPLOYMENT_TARGET_API_LEVEL}-ndk${NDK_
 echo - mobsya/qt-builder:android${QT_BUILD_API_LEVEL}-ndk${NDK_VERSION}-qt${QT_BASE_VERSION}.${QT_PATCH_NUMBER}
 echo - mobsya/thymio-dev-env:android${THYMIO_BUILD_API_LEVEL}-ndk${NDK_VERSION}-qt${QT_BASE_VERSION}.${QT_PATCH_NUMBER}-cmake${CMAKE_VERSION}
 
-if [ "$1" == "--push" ]; then
+if [ "$1" == "--push" ] || [ "$2" == "--push" ]; then
     docker push mobsya/android-sdk:android${QT_BUILD_API_LEVEL}-ndk${NDK_VERSION} \
         && docker push mobsya/android-sdk:android${THYMIO_BUILD_API_LEVEL}-ndk${NDK_VERSION} \
         && docker push mobsya/android-sdk:android${THYMIO_DEPLOYMENT_TARGET_API_LEVEL}-ndk${NDK_VERSION} \

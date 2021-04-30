@@ -4,10 +4,11 @@ echo "===== Configuration ====="
 QT_VERSION=5.15.2
 NDK_VERSION=21        # As of Qt 5.14, Qt 5.13.2+ and Qt 5.12.6+, the latest Android NDK (r20b or r21) is required.
 CMAKE_VERSION=3.19.7
+THYMIO_DEPLOYMENT_TARGET_API_LEVEL=30
 echo "-------------------------"
 
-if [ -z "$API_LEVEL" ]; then
-  read -p "Enter the desired Android API level (Android build platform, e.g. 21, 24, 28 or 29): " API_LEVEL
+if [ -z "$THYMIO_BUILD_API_LEVEL" ]; then
+  read -p "Enter the desired Android API level (Android build platform, e.g. 21, 24, 28 or 29): " THYMIO_BUILD_API_LEVEL
 fi
 if [ ! -f "$SRC_DIR/CMakeLists.txt" ]; then
   echo --- "$SRC_DIR/CMakeLists.txt" not found. We need to define the source dir.
@@ -28,7 +29,7 @@ if [ -z "$BUILD_DIR" ]; then
   exit 1
 fi
 
-DEV_ENVIRONMENT_TAG=android${API_LEVEL}-ndk${NDK_VERSION}-qt${QT_VERSION}-cmake${CMAKE_VERSION}
+DEV_ENVIRONMENT_TAG=android${THYMIO_BUILD_API_LEVEL}-ndk${NDK_VERSION}-qt${QT_VERSION}-cmake${CMAKE_VERSION}
 
 if [ ! -d "$SRC_DIR/vpl3-thymio-suite" ]; then
   echo ---Download assets into ${SRC_DIR}
@@ -44,6 +45,6 @@ if [ ! -d "$SRC_DIR/scratch" ]; then
   rm scratch-gui.tar.gz
 fi
 
-(echo export API_LEVEL=$API_LEVEL; echo export DEV_ENVIRONMENT_TAG=$DEV_ENVIRONMENT_TAG; echo export SRC_DIR=$SRC_DIR; echo export BUILD_DIR=$BUILD_DIR) > .build-env
+(echo export THYMIO_DEPLOYMENT_TARGET_API_LEVEL=$THYMIO_DEPLOYMENT_TARGET_API_LEVEL; echo export THYMIO_BUILD_API_LEVEL=$THYMIO_BUILD_API_LEVEL; echo export DEV_ENVIRONMENT_TAG=$DEV_ENVIRONMENT_TAG; echo export SRC_DIR=$SRC_DIR; echo export BUILD_DIR=$BUILD_DIR; echo export QT_VERSION=$QT_VERSION; echo export NDK_VERSION=$NDK_VERSION; echo export CMAKE_VERSION=$CMAKE_VERSION) > .build-env
 
 echo --- Type . .build-env to source the environment variables.
