@@ -35,4 +35,4 @@ yes | ./sdkmanager --sdk_root=${ANDROID_SDK_PATH} --verbose --licenses
 yes | ./sdkmanager --sdk_root=${ANDROID_SDK_PATH} --update
 yes | ./sdkmanager --sdk_root=${ANDROID_SDK_PATH} "platforms;$sdkApiLevel" "platform-tools" "build-tools;$sdkBuildToolsVersion"
 echo "Provisioning complete. Here's the list of packages:"
-./sdkmanager --sdk_root=${ANDROID_SDK_PATH}  --list
+./sdkmanager --sdk_root=${ANDROID_SDK_PATH} --list

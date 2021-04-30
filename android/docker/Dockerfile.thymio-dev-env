@@ -1,19 +1,26 @@
-ARG QT_API_LEVEL
-ARG THYMIO_API_LEVEL
-ARG NDK_VERSION
+ARG QT_BUILD_API_LEVEL
+ARG THYMIO_BUILD_API_LEVEL
+ARG THYMIO_DEPLOYMENT_TARGET_API_LEVEL
 ARG NDK_VERSION
 ARG QT_BASE_VERSION
 ARG QT_PATCH_NUMBER
 
-FROM mobsya/qt-builder:android${QT_API_LEVEL}-ndk${NDK_VERSION}-qt${QT_BASE_VERSION}.${QT_PATCH_NUMBER} as qt
+FROM mobsya/android-sdk:android${THYMIO_DEPLOYMENT_TARGET_API_LEVEL}-ndk${NDK_VERSION} as deploy-sdk
 
-FROM mobsya/android-sdk:android${THYMIO_API_LEVEL}-ndk${NDK_VERSION}
+ARG QT_BUILD_API_LEVEL
+FROM mobsya/qt-builder:android${QT_BUILD_API_LEVEL}-ndk${NDK_VERSION}-qt${QT_BASE_VERSION}.${QT_PATCH_NUMBER} as qt
+
+ARG THYMIO_BUILD_API_LEVEL
+FROM mobsya/android-sdk:android${THYMIO_BUILD_API_LEVEL}-ndk${NDK_VERSION}
 COPY --from=qt /qt /qt
+ARG THYMIO_DEPLOYMENT_TARGET_API_LEVEL
+COPY --from=deploy-sdk /usr/lib/android-sdk/platforms/android-${THYMIO_DEPLOYMENT_TARGET_API_LEVEL} /usr/lib/android-sdk/platforms/android-${THYMIO_DEPLOYMENT_TARGET_API_LEVEL}
 
 
 # Install required packages for compiling custom CMake (libssl-dev) or required to build Thymio Suite. The git package
-# is required by Aseba Common lib to obtain the Git revision at build time and publish it as a static variable.
-RUN apt update && apt install -y -q libssl-dev python3 ninja-build git && rm -rf /var/lib/apt/lists/*
+# is required by Aseba Common lib to obtain the Git revision at build time and publish it as a static variable. The jq
+# package is used for manipulating JSON files from the command line.
+RUN apt update && apt install -y -q libssl-dev python3 ninja-build git jq && rm -rf /var/lib/apt/lists/*
 
 # Install CMake >= 3.13 (minimum required version).
 ARG CMAKE_VERSION=3.19.2
@@ -34,13 +41,16 @@ ENV QT_ANDROID_SDK_ROOT=${ANDROID_SDK_PATH}
 ENV ANDROID_SDK=${ANDROID_SDK_PATH}
 ENV ANDROID_NDK=${ANDROID_NDK_PATH}
 
-ARG THYMIO_API_LEVEL
-ENV API_LEVEL ${THYMIO_API_LEVEL}
+ARG THYMIO_BUILD_API_LEVEL
+ENV API_LEVEL=${THYMIO_BUILD_API_LEVEL}
+ENV THYMIO_BUILD_API_LEVEL=${THYMIO_BUILD_API_LEVEL}
+ARG THYMIO_DEPLOYMENT_TARGET_API_LEVEL
+ENV THYMIO_DEPLOYMENT_TARGET_API_LEVEL=${THYMIO_DEPLOYMENT_TARGET_API_LEVEL}
 ARG NDK_VERSION
-ENV NDK_VERSION ${NDK_VERSION}
+ENV NDK_VERSION=${NDK_VERSION}
 ARG QT_BASE_VERSION
 ARG QT_PATCH_NUMBER
-ENV QT_VERSION ${QT_BASE_VERSION}.${QT_PATCH_NUMBER}
+ENV QT_VERSION=${QT_BASE_VERSION}.${QT_PATCH_NUMBER}
 
 ENTRYPOINT ["/bin/bash", "-c"]
-CMD ["echo === Qt development environment for Android: API_LEVEL=$API_LEVEL, NDK_VERSION=$NDK_VERSION, QT_VERSION=$QT_VERSION ===; echo ; cmake --version; echo Ninja $(ninja --version); echo QT_ANDROID_SDK_ROOT: $QT_ANDROID_SDK_ROOT; echo ANDROID_SDK, ANDROID_SDK_PATH: $ANDROID_SDK_PATH; echo ANDROID_NDK, ANDROID_NDK_PATH: $ANDROID_NDK_PATH"]
+CMD ["echo === Qt development environment for Android: THYMIO_BUILD_API_LEVEL=API_LEVEL=$THYMIO_BUILD_API_LEVEL, THYMIO_DEPLOYMENT_TARGET_API_LEVEL=$THYMIO_DEPLOYMENT_TARGET_API_LEVEL, NDK_VERSION=$NDK_VERSION, QT_VERSION=$QT_VERSION ===; echo ; cmake --version; echo Ninja $(ninja --version); echo QT_ANDROID_SDK_ROOT: $QT_ANDROID_SDK_ROOT; echo ANDROID_SDK, ANDROID_SDK_PATH: $ANDROID_SDK_PATH; echo ANDROID_NDK, ANDROID_NDK_PATH: $ANDROID_NDK_PATH"]
