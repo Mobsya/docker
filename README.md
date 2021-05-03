@@ -49,25 +49,26 @@ It is strongly suggested using an out of tree build strategy targeting the /buil
 # Build environment (note that running ./setup-thymio-dev-env.sh will take care of this part)
 SRC_DIR=$(pwd)/aseba
 BUILD_DIR=$(pwd)/aseba-build
-API_LEVEL=24
-DEV_ENVIRONMENT_TAG=android${API_LEVEL}-ndk21-qt5.15.2-cmake3.19.4
+THYMIO_BUILD_API_LEVEL=24
+THYMIO_DEPLOYMENT_TARGET_API_LEVEL=30
+DEV_ENVIRONMENT_TAG=android${THYMIO_BUILD_API_LEVEL}and${THYMIO_DEPLOYMENT_TARGET_API_LEVEL}-ndk21-qt5.15.2-cmake3.19.4
 
 # Build target
 build_type=Debug
 arch=x86_64
 
 # Create build directory on host
-mkdir -p ${BUILD_DIR}/${build_type}/${arch}/android-${API_LEVEL}
+mkdir -p ${BUILD_DIR}/${build_type}/${arch}/android-${THYMIO_BUILD_API_LEVEL}
 
 # Run the build of ${SRC_DIR} with the container
 docker run --rm \
     -v ${SRC_DIR}:/src:rw \
-    -v ${BUILD_DIR}/${build_type}/${arch}/android-${API_LEVEL}:/build:rw \
+    -v ${BUILD_DIR}/${build_type}/${arch}/android-${THYMIO_BUILD_API_LEVEL}:/build:rw \
     mobsya/thymio-dev-env:${DEV_ENVIRONMENT_TAG} \
-    "cmake -DANDROID_PLATFORM=android-${API_LEVEL} -DANDROID_ABI=${arch} -DCMAKE_TOOLCHAIN_FILE=\$ANDROID_NDK_PATH/build/cmake/android.toolchain.cmake -DCMAKE_FIND_ROOT_PATH=/qt -DCMAKE_BUILD_TYPE=$build_type -DBUILD_SHARED_LIBS=OFF -GNinja -S /src -B /build && cd /build && ninja -j $(nproc)"
+    "cmake -DANDROID_PLATFORM=android-${THYMIO_BUILD_API_LEVEL} -DANDROID_ABI=${arch} -DCMAKE_TOOLCHAIN_FILE=\$ANDROID_NDK_PATH/build/cmake/android.toolchain.cmake -DCMAKE_FIND_ROOT_PATH=/qt -DCMAKE_BUILD_TYPE=$build_type -DBUILD_SHARED_LIBS=OFF -GNinja -S /src -B /build && cd /build && ninja -j $(nproc)"
 ```
 
-The option `-v ${SRC_DIR}:/src:rw` indicates that the source folder of Thymio is mapped in the container from the source directory on the host, while the option `-v ${BUILD_DIR}/${build_type}/${arch}/android-${API_LEVEL}:/build:rw` indicates that a folder pointed by `${BUILD_DIR}/${build_type}/${arch}/android-${API_LEVEL}` will be mapped to the /build volume of the container. Thus, the container will write the resulting build onto the host.
+The option `-v ${SRC_DIR}:/src:rw` indicates that the source folder of Thymio is mapped in the container from the source directory on the host, while the option `-v ${BUILD_DIR}/${build_type}/${arch}/android-${THYMIO_BUILD_API_LEVEL}:/build:rw` indicates that a folder pointed by `${BUILD_DIR}/${build_type}/${arch}/android-${THYMIO_BUILD_API_LEVEL}` will be mapped to the /build volume of the container. Thus, the container will write the resulting build onto the host.
 
 Here is an example for building Thymio for several architectures (one build folder per targeted build type and architecture):
 
@@ -75,20 +76,21 @@ Here is an example for building Thymio for several architectures (one build fold
 # Build environment
 SRC_DIR=$(pwd)/aseba
 BUILD_DIR=$(pwd)/aseba-build
-API_LEVEL=24
-DEV_ENVIRONMENT_TAG=android${API_LEVEL}-ndk21-qt5.15.2-cmake3.19.4
+THYMIO_BUILD_API_LEVEL=24
+THYMIO_DEPLOYMENT_TARGET_API_LEVEL=30
+DEV_ENVIRONMENT_TAG=android${THYMIO_BUILD_API_LEVEL}and${THYMIO_DEPLOYMENT_TARGET_API_LEVEL}-ndk21-qt5.15.2-cmake3.19.7
 
 # Build all targets
 build_types="Debug Release"
 for build_type in $build_types; do
     architectures="armeabi-v7a arm64-v8a x86 x86_64"
     for arch in $architectures; do
-        mkdir -p ${BUILD_DIR}/${build_type}/${arch}/android-${API_LEVEL}
+        mkdir -p ${BUILD_DIR}/${build_type}/${arch}/android-${THYMIO_BUILD_API_LEVEL}
         docker run --rm \
         	-v ${SRC_DIR}:/src:rw \
-        	-v ${BUILD_DIR}/${build_type}/${arch}/android-${API_LEVEL}:/build:rw \
+        	-v ${BUILD_DIR}/${build_type}/${arch}/android-${THYMIO_BUILD_API_LEVEL}:/build:rw \
         	mobsya/thymio-dev-env:${DEV_ENVIRONMENT_TAG} \
-        	"cmake -DANDROID_PLATFORM=android-${API_LEVEL} -DANDROID_ABI=${arch} -DCMAKE_TOOLCHAIN_FILE=\$ANDROID_NDK_PATH/build/cmake/android.toolchain.cmake -DCMAKE_FIND_ROOT_PATH=/qt -DCMAKE_BUILD_TYPE=$build_type -DBUILD_SHARED_LIBS=OFF -GNinja -S /src -B /build && cd /build && ninja -j $(nproc)"
+        	"cmake -DANDROID_PLATFORM=android-${THYMIO_BUILD_API_LEVEL} -DANDROID_ABI=${arch} -DCMAKE_TOOLCHAIN_FILE=\$ANDROID_NDK_PATH/build/cmake/android.toolchain.cmake -DCMAKE_FIND_ROOT_PATH=/qt -DCMAKE_BUILD_TYPE=$build_type -DBUILD_SHARED_LIBS=OFF -GNinja -S /src -B /build && cd /build && ninja -j $(nproc)"
     done
 done
 ```
