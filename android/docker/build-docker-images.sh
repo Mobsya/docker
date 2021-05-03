@@ -25,7 +25,8 @@ if [ "$1" != "--no-qt-build" ]; then
 fi
 
 echo --- Creating development environment for Qt ${QT_BASE_VERSION}.${QT_PATCH_NUMBER}
-docker build -t mobsya/thymio-dev-env:android${THYMIO_BUILD_API_LEVEL}-ndk${NDK_VERSION}-qt${QT_BASE_VERSION}.${QT_PATCH_NUMBER}-cmake${CMAKE_VERSION} --build-arg NDK_VERSION=${NDK_VERSION} --build-arg QT_BUILD_API_LEVEL=${QT_BUILD_API_LEVEL} --build-arg THYMIO_BUILD_API_LEVEL=${THYMIO_BUILD_API_LEVEL} --build-arg THYMIO_DEPLOYMENT_TARGET_API_LEVEL=${THYMIO_DEPLOYMENT_TARGET_API_LEVEL} --build-arg QT_BASE_VERSION=${QT_BASE_VERSION} --build-arg QT_PATCH_NUMBER=${QT_PATCH_NUMBER} --build-arg CMAKE_VERSION=${CMAKE_VERSION} -f Dockerfile.thymio-dev-env .
+dev_env_tag_name=android${THYMIO_BUILD_API_LEVEL}and${THYMIO_DEPLOYMENT_TARGET_API_LEVEL}-ndk${NDK_VERSION}-qt${QT_BASE_VERSION}.${QT_PATCH_NUMBER}-cmake${CMAKE_VERSION}
+docker build -t mobsya/thymio-dev-env:${dev_env_tag_name} --build-arg NDK_VERSION=${NDK_VERSION} --build-arg QT_BUILD_API_LEVEL=${QT_BUILD_API_LEVEL} --build-arg THYMIO_BUILD_API_LEVEL=${THYMIO_BUILD_API_LEVEL} --build-arg THYMIO_DEPLOYMENT_TARGET_API_LEVEL=${THYMIO_DEPLOYMENT_TARGET_API_LEVEL} --build-arg QT_BASE_VERSION=${QT_BASE_VERSION} --build-arg QT_PATCH_NUMBER=${QT_PATCH_NUMBER} --build-arg CMAKE_VERSION=${CMAKE_VERSION} -f Dockerfile.thymio-dev-env .
 
 echo Build of images started at: $start_time
 echo Build of images ended at:   $(date)
@@ -35,14 +36,14 @@ echo - mobsya/android-sdk:android${QT_BUILD_API_LEVEL}-ndk${NDK_VERSION}
 echo - mobsya/android-sdk:android${THYMIO_BUILD_API_LEVEL}-ndk${NDK_VERSION}
 echo - mobsya/android-sdk:android${THYMIO_DEPLOYMENT_TARGET_API_LEVEL}-ndk${NDK_VERSION}
 echo - mobsya/qt-builder:android${QT_BUILD_API_LEVEL}-ndk${NDK_VERSION}-qt${QT_BASE_VERSION}.${QT_PATCH_NUMBER}
-echo - mobsya/thymio-dev-env:android${THYMIO_BUILD_API_LEVEL}-ndk${NDK_VERSION}-qt${QT_BASE_VERSION}.${QT_PATCH_NUMBER}-cmake${CMAKE_VERSION}
+echo - mobsya/thymio-dev-env:${dev_env_tag_name}
 
 if [ "$1" == "--push" ] || [ "$2" == "--push" ]; then
     docker push mobsya/android-sdk:android${QT_BUILD_API_LEVEL}-ndk${NDK_VERSION} \
         && docker push mobsya/android-sdk:android${THYMIO_BUILD_API_LEVEL}-ndk${NDK_VERSION} \
         && docker push mobsya/android-sdk:android${THYMIO_DEPLOYMENT_TARGET_API_LEVEL}-ndk${NDK_VERSION} \
         && docker push mobsya/qt-builder:android${QT_BUILD_API_LEVEL}-ndk${NDK_VERSION}-qt${QT_BASE_VERSION}.${QT_PATCH_NUMBER} \
-        && docker push mobsya/thymio-dev-env:android${THYMIO_BUILD_API_LEVEL}-ndk${NDK_VERSION}-qt${QT_BASE_VERSION}.${QT_PATCH_NUMBER}-cmake${CMAKE_VERSION}
+        && docker push mobsya/thymio-dev-env:${dev_env_tag_name}
 else
     echo --- Images were not pushed. You should invoke $(basename "$0") with --push option in order to push the images to the Docker repository.
 fi

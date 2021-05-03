@@ -36,7 +36,7 @@ for build_type in $build_types; do
     docker run --rm \
       --user ${user_id}:${group_id} \
       -v ${multi_arch_build_folder}:/build:rw \
-      mobsya/thymio-dev-env:android$THYMIO_BUILD_API_LEVEL-ndk$NDK_VERSION-qt$QT_VERSION-cmake${CMAKE_VERSION} \
+      mobsya/thymio-dev-env:${DEV_ENVIRONMENT_TAG} \
      "jq '.architectures = { \"arm64-v8a\":\"arm64-v8a\", \"armeabi-v7a\":\"armeabi-v7a\", \"x86\":\"x86\", \"x86_64\":\"x86_64\" }' /build/aseba/launcher/src/qtdeploy.json > /build/aseba/launcher/src/qtdeploy.json.tmp && mv /build/aseba/launcher/src/qtdeploy.json.tmp /build/aseba/launcher/src/qtdeploy.json"
 
     # Package multi-ABIs (requires root access to /usr/lib)
@@ -45,12 +45,12 @@ for build_type in $build_types; do
     docker run --rm \
       -v ${multi_arch_build_folder}:/build:rw \
       -e ANDROID_TARGET_SDK_VERSION=${THYMIO_DEPLOYMENT_TARGET_API_LEVEL} \
-      mobsya/thymio-dev-env:android$THYMIO_BUILD_API_LEVEL-ndk$NDK_VERSION-qt$QT_VERSION-cmake${CMAKE_VERSION} \
+      mobsya/thymio-dev-env:${DEV_ENVIRONMENT_TAG} \
      "/qt/bin/androiddeployqt --input /build/aseba/launcher/src/qtdeploy.json --output /build/android-build --aab ${build_type_option} ${android_target_platform}"
 
     # Set ownership to current user
     docker run --rm \
       -v ${multi_arch_build_folder}:/build:rw \
-      mobsya/thymio-dev-env:android$THYMIO_BUILD_API_LEVEL-ndk$NDK_VERSION-qt$QT_VERSION-cmake${CMAKE_VERSION} \
+      mobsya/thymio-dev-env:${DEV_ENVIRONMENT_TAG} \
       "chown -R ${user_id}:${group_id} /build"
 done

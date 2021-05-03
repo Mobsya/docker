@@ -29,7 +29,7 @@ if [ -z "$BUILD_DIR" ]; then
   exit 1
 fi
 
-DEV_ENVIRONMENT_TAG=android${THYMIO_BUILD_API_LEVEL}-ndk${NDK_VERSION}-qt${QT_VERSION}-cmake${CMAKE_VERSION}
+DEV_ENVIRONMENT_TAG=android${THYMIO_BUILD_API_LEVEL}and${THYMIO_DEPLOYMENT_TARGET_API_LEVEL}-ndk${NDK_VERSION}-qt${QT_VERSION}-cmake${CMAKE_VERSION}
 
 if [ ! -d "$SRC_DIR/vpl3-thymio-suite" ]; then
   echo ---Download assets into ${SRC_DIR}
