@@ -95,7 +95,7 @@ for build_type in $build_types; do
 done
 ```
 
-**The result from the example above can be achieved in one command: `./build-thymio.sh`**
+**The result from the example above can be achieved in one command: `./build-thymio.sh `**. When one adds the `--package` argument to the aforementioned command, the application is also bundled as an AAB file.
 
 ##  Building Images
 
